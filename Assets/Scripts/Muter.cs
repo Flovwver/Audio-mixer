@@ -1,14 +1,17 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class Muter : MonoBehaviour
 {
-    [SerializeField] private AudioMixer _audioMixer;
-    [SerializeField] private Button _volumeToogler;
-    [SerializeField] private Slider _masterVolume;
-    [SerializeField] private float _lastVolumeValue = 1f;
-    [SerializeField] private float _mutedVolumeValue = 0f;
+    [SerializeField] private AudioListener _audioListener;
+
+    private Button _volumeToogler;
+
+    private void Awake()
+    {
+        _volumeToogler = GetComponent<Button>();
+    }
 
     private void OnEnable()
     {
@@ -24,20 +27,6 @@ public class Muter : MonoBehaviour
 
     private void ToogleIsMuted()
     {
-        if (_masterVolume == null)
-            return;
-
-        bool isMuted;
-
-        isMuted = _masterVolume.value == 0;
-
-        isMuted = !isMuted;
-
-        float needVolume = isMuted ? _mutedVolumeValue : _lastVolumeValue;
-
-        if (isMuted)
-            _lastVolumeValue = _masterVolume.value;
-            
-        _masterVolume.value = needVolume;
+        _audioListener.enabled = _audioListener.enabled == false;
     }
 }
